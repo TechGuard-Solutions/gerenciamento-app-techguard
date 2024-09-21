@@ -14,6 +14,6 @@ git clone https://github.com/TechGuard-Solutions/site-institucional.git
 echo -e "${GREEN}Aplicação Instalada...${NC}"
 
 echo -e "${YELLOW}Instalando Ferramentas...${NC}"
-cd site-Institucional/ShellScripts
+cd site-institucional/ShellScripts
 bash VerificacaoInstalacaoSJN.sh
 echo -e "${GREEN}Ferramentas Instaladas...${NC}"
