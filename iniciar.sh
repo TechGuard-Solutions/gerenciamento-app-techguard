@@ -6,6 +6,10 @@ RED='\033[0;31m'    # Cor vermelha
 YELLOW='\033[1;33m' # Cor amarela
 NC='\033[0m'        # Sem cor (para resetar)
 
-echo -e "${YELLOW}Instalando Aplicação...${NC}"
-git clone https://github.com/TechGuard-Solutions/Site-Institucional.git
-echo -e "${GREEN}Aplicação Instalada...${NC}"
+echo -e "${YELLOW}Acessando Diretório...${NC}"
+cd Site-Institucional
+echo -e "${GREEN}Diretório Acessado...${NC}"
+
+
+echo -e "${YELLOW}Iniciando Aplicação...${NC}"
+bash iniciar.sh
