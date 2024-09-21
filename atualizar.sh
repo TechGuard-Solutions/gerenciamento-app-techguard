@@ -10,6 +10,6 @@ echo -e "${YELLOW}Acessando Diretório...${NC}"
 cd Site-Institucional
 echo -e "${GREEN}Diretório Acessado...${NC}"
 
-echo -e "${YELLOW}Atualizando Aplicação...${NC}"]
+echo -e "${YELLOW}Atualizando Aplicação...${NC}"
 git pull
 echo -e "${GREEN}Aplicação Atualizada...${NC}"
