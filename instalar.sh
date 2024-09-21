@@ -7,10 +7,13 @@ YELLOW='\033[1;33m' # Cor amarela
 NC='\033[0m'        # Sem cor (para resetar)
 
 echo -e "${YELLOW}Instalando Aplicação...${NC}"
-git clone https://github.com/TechGuard-Solutions/Site-Institucional.git
+cd ..
+mkdir AplicacaoTechGuard
+cd AplicacaoTechGuard
+git clone https://github.com/TechGuard-Solutions/site-institucional.git
 echo -e "${GREEN}Aplicação Instalada...${NC}"
 
 echo -e "${YELLOW}Instalando Ferramentas...${NC}"
-cd Site-Institucional/ShellScripts
+cd site-Institucional/ShellScripts
 bash VerificacaoInstalacaoSJN.sh
 echo -e "${GREEN}Ferramentas Instaladas...${NC}"
