@@ -9,7 +9,7 @@ NC='\033[0m'        # Sem cor (para resetar)
 echo -e "${YELLOW}Acessando Diretório...${NC}"
 cd ..
 cd AplicacaoTechGuard
-cd site-institucional
+cd site-institucional/ShellScripts
 echo -e "${GREEN}Diretório Acessado...${NC}"
 echo -e "${YELLOW}Iniciando Aplicação...${NC}"
 bash iniciar.sh
