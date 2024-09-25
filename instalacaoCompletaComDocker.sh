@@ -127,7 +127,7 @@ DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM mysql:latest
 ENV MYSQL_ROOT_PASSWORD=solutions
-COPY ../site-institucional/src/database/script-tabelas.sql /docker-entrypoint-initdb.d/
+COPY ../DockerfileNode/site-institucional/src/database/script-tabelas.sql /docker-entrypoint-initdb.d/
 EXPOSE 3306
 EOF
 check_last_command
