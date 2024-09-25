@@ -123,7 +123,8 @@ check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
 
 echo -e "${YELLOW}Copiando arquivo .sql...${NC}"
-cp ../DockerfileNode/site-institucional/src/database/script-tabelas.sql DockerfileMysql/database/
+cp -v ../DockerfileNode/site-institucional/src/database/script-tabelas.sql DockerfileMysql/database/
+check_last_command
 echo -e "${GREEN}Arquivo copiado com sucesso!${NC}"
 
 # Criando Dockerfile para MySQL
