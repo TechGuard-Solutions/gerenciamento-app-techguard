@@ -111,7 +111,7 @@ if [ -d "$DIRECTORY" ]; then
   echo -e "${YELLOW}Diretório DockerfileMysql já existe. Pulando criação.${NC}"
 else
   echo -e "${YELLOW}Criando diretório de imagem MySQL...${NC}"
-  mkdir DockerfileMysql
+  mkdir DockerfileMysql/database
   check_last_command
   echo -e "${GREEN}Diretório criado com sucesso!${NC}"
 fi
@@ -122,7 +122,7 @@ check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
 
 echo -e "${YELLOW}Copiando arquivo .sql...${NC}"
-cp ../DockerfileNode/site-institucional/src/database/script-tabelas.sql DockerfileMysql/
+cp ../DockerfileNode/site-institucional/src/database/script-tabelas.sql DockerfileMysql/database/
 echo -e "${GREEN}Arquivo copiado com sucesso!${NC}"
 
 # Criando Dockerfile para MySQL
@@ -131,7 +131,7 @@ DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM mysql:latest
 ENV MYSQL_ROOT_PASSWORD=solutions
-COPY script-tabelas.sql /docker-entrypoint-initdb.d/
+COPY ./database/ /docker-entrypoint-initdb.d/
 EXPOSE 3306
 EOF
 check_last_command
