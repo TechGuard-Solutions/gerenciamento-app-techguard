@@ -50,6 +50,11 @@ else
   fi
 fi
 
+# Criando Network Docker
+sudo docker network create techguard-network
+
+
+
 # Criando diretório para Node
 DIRECTORY="DockerfileNode"
 if [ -d "$DIRECTORY" ]; then
@@ -99,7 +104,9 @@ echo -e "${GREEN}Build concluído com sucesso!${NC}"
 
 # Iniciando container Node
 echo -e "${YELLOW}Iniciando container...${NC}"
-sudo docker run -d --name TechGuardAPP -p 8080:8080 nodetechguard-img
+sudo docker network connect techguard-network TechGuardAPP
+check_last_command
+sudo docker run -d --name TechGuardAPP --network techguard-network -p 8080:8080 nodetechguard-img
 check_last_command
 echo -e "${GREEN}Container Node iniciado com sucesso!${NC}"
 
@@ -147,7 +154,9 @@ echo -e "${GREEN}Build concluído com sucesso!${NC}"
 
 # Iniciando container MySQL
 echo -e "${YELLOW}Iniciando container...${NC}"
-sudo docker run -d --name TechGuardDB -p 3306:3306 mysqltechguard-img
+sudo docker network connect techguard-network TechGuardDB
+check_last_command
+sudo docker run -d --name TechGuardDB --network techguard-network -p 3306:3306 mysqltechguard-img
 check_last_command
 echo -e "${GREEN}Container MySQL iniciado com sucesso!${NC}"
 
