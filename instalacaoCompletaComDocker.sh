@@ -150,4 +150,8 @@ echo -e "${YELLOW}Iniciando container...${NC}"
 sudo docker run -d --name TechGuardDB -p 3306:3306 mysqltechguard-img
 check_last_command
 echo -e "${GREEN}Container MySQL iniciado com sucesso!${NC}"
+
+echo -e "${YELLOW}Garantindo inicialização dos contêiners...${NC}"
+sudo docker start TechGuardDB
+sudo docker start TechGuardAPP
 echo -e "${GREEN}Instalação finalizada!"
