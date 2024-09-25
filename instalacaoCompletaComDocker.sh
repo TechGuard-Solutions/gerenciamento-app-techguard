@@ -111,13 +111,14 @@ if [ -d "$DIRECTORY" ]; then
   echo -e "${YELLOW}Diretório DockerfileMysql já existe. Pulando criação.${NC}"
 else
   echo -e "${YELLOW}Criando diretório de imagem MySQL...${NC}"
-  mkdir DockerfileMysql/database
+  mkdir DockerfileMysql
   check_last_command
   echo -e "${GREEN}Diretório criado com sucesso!${NC}"
 fi
 
 echo -e "${YELLOW}Acessando diretório...${NC}"
 cd DockerfileMysql
+mkdir database
 check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
 
