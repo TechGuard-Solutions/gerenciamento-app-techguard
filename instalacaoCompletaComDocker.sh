@@ -121,13 +121,17 @@ cd DockerfileMysql
 check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
 
+echo -e "${YELLOW}Copiando arquivo .sql...${NC}"
+cp DockerfileNode/site-institucional/src/database/script-tabelas.sql DockerfileMysql/
+echo -e "${GREEN}Arquivo copiado com sucesso!${NC}"
+
 # Criando Dockerfile para MySQL
 echo -e "${YELLOW}Criando Dockerfile com imagem MySQL...${NC}"
 DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM mysql:latest
 ENV MYSQL_ROOT_PASSWORD=solutions
-COPY ../DockerfileNode/site-institucional/src/database/script-tabelas.sql /docker-entrypoint-initdb.d/
+COPY script-tabelas.sql /docker-entrypoint-initdb.d/
 EXPOSE 3306
 EOF
 check_last_command
