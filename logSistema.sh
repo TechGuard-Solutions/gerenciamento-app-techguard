@@ -3,7 +3,7 @@
 LOG_DIR="/var/log/myapp"
 LOG_FILE="$LOG_DIR/system_info_$(date +%d%m%Y_%H%M%S).log"
 
-S3_BUCKET="bucket-techguard"
+S3_BUCKET="techguard-bucket"
 
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR"
