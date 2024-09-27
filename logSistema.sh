@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_DIR="/var/log/myapp"
-LOG_FILE="$LOG_DIR/system_info_$(date +%d%m%Y_%H%M%S).log"
+LOG_FILE="$LOG_DIR/logs_sistema_$(date +%d%m%Y_%H%M%S).log"
 
 S3_BUCKET="techguard-bucket"
 

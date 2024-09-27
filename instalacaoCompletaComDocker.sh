@@ -50,10 +50,56 @@ else
   fi
 fi
 
+# Verificando instalação do curl
+echo -e "${YELLOW}Verificando instalação do curl...${NC}"
+curl --version
+if [ $? = 0 ]; then
+  echo -e "${GREEN}curl instalado!${NC}"
+else
+  echo -e "${RED}curl não está instalado. Instalando...${NC}"
+  sudo apt install curl -y
+  check_last_command
+  echo -e "${GREEN}curl instalado com sucesso!${NC}"
+fi
+
+# Verificando instalação do unzip
+echo -e "${YELLOW}Verificando instalação do unzip...${NC}"
+unzip -v
+if [ $? = 0 ]; then
+  echo -e "${GREEN}unzip instalado!${NC}"
+else
+  echo -e "${RED}unzip não está instalado. Instalando...${NC}"
+  sudo apt install unzip -y
+  check_last_command
+  echo -e "${GREEN}unzip instalado com sucesso!${NC}"
+fi
+
+# Verificando instalação do AWS CLI
+echo -e "${YELLOW}Verificando instalação do AWS CLI...${NC}"
+if ! command -v aws &> /dev/null; then
+  echo -e "${RED}AWS CLI não encontrado. Iniciando instalação...${NC}"
+  
+  # Baixar o instalador do AWS CLI
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  check_last_command
+  
+  # Descompactar o arquivo
+  unzip awscliv2.zip
+  check_last_command
+  
+  # Executar a instalação
+  sudo ./aws/install
+  check_last_command
+  
+  # Remover arquivos temporários
+  rm -rf awscliv2.zip aws
+  echo -e "${GREEN}AWS CLI instalado com sucesso e arquivos temporários removidos!${NC}"
+else
+  echo -e "${GREEN}AWS CLI já está instalado!${NC}"
+fi
+
 # Criando Network Docker
 sudo docker network create techguard-network
-
-
 
 # Criando diretório para Node
 DIRECTORY="DockerfileNode"
@@ -159,4 +205,4 @@ echo -e "${GREEN}Container MySQL iniciado com sucesso!${NC}"
 echo -e "${YELLOW}Garantindo inicialização dos contêiners...${NC}"
 sudo docker start TechGuardDB
 sudo docker start TechGuardAPP
-echo -e "${GREEN}Instalação finalizada!"
+echo -e "${GREEN}Instalação finalizada!${NC}"
