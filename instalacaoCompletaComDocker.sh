@@ -100,6 +100,7 @@ fi
 
 # Criando Network Docker
 sudo docker network create techguard-network
+check_last_command
 
 # Criando diretório para Node
 DIRECTORY="DockerfileNode"
@@ -202,7 +203,51 @@ sudo docker run -d --name TechGuardDB --network techguard-network -p 3306:3306 m
 check_last_command
 echo -e "${GREEN}Container MySQL iniciado com sucesso!${NC}"
 
+cd ..
+
+# Criando diretório para JAVA
+DIRECTORY="DockerfileJava"
+if [ -d "$DIRECTORY" ]; then
+  echo -e "${YELLOW}Diretório DockerfileJava já existe. Pulando criação.${NC}"
+else
+  echo -e "${YELLOW}Criando diretório de imagem Java...${NC}"
+  mkdir DockerfileJava
+  check_last_command
+  echo -e "${GREEN}Diretório criado com sucesso!${NC}"
+fi
+
+echo -e "${YELLOW}Acessando diretório...${NC}"
+cd DockerfileJava
+git clone https://github.com/TechGuard-Solutions/conexao-java.git
+check_last_command
+echo -e "${GREEN}Diretório acessado${NC}"
+
+# Criando Dockerfile para JAVA
+echo -e "${YELLOW}Criando Dockerfile com imagem JAVA...${NC}"
+DOCKERFILE="Dockerfile"
+cat <<EOF >$DOCKERFILE
+FROM openjdk:21
+WORKDIR /usr/src/app
+EXPOSE 3030
+CMD ["java", "-jar", "target/iniciar.jar"]
+EOF
+check_last_command
+echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
+
+# Buildando imagem do JAVA
+echo -e "${YELLOW}Buildando imagem...${NC}"
+sudo docker build -t javatechguard-img .
+check_last_command
+echo -e "${GREEN}Build concluído com sucesso!${NC}"
+
+# Iniciando container JAVA
+echo -e "${YELLOW}Iniciando container...${NC}"
+sudo docker run -d --name TechGuardJAVA --network techguard-network -p 3030:3030 javatechguard-img
+check_last_command
+echo -e "${GREEN}Container JAVA iniciado com sucesso!${NC}"
+
 echo -e "${YELLOW}Garantindo inicialização dos contêiners...${NC}"
 sudo docker start TechGuardDB
 sudo docker start TechGuardAPP
+sudo docker start TechGuardJAVA
 echo -e "${GREEN}Instalação finalizada!${NC}"
