@@ -22,7 +22,7 @@ echo "======================" >> "$LOG_FILE"
 echo "Log concluído." >> "$LOG_FILE"
 
 echo "Enviando log para o S3: $S3_BUCKET"
-aws s3 cp "$LOG_FILE" s3://$S3_BUCKET/logs/logDB
+aws s3 cp "$LOG_FILE" s3://$S3_BUCKET/logs/logsDB/
 
 if [ $? -eq 0 ]; then
   echo "Log enviado com sucesso para o S3."

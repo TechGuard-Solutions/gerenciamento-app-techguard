@@ -19,7 +19,7 @@ uptime >> "$LOG_FILE"
 sudo docker logs TechGuardAPP
 
 echo "Enviando log para o S3: $S3_BUCKET"
-aws s3 cp "$LOG_FILE" s3://$S3_BUCKET/logs/logNode
+aws s3 cp "$LOG_FILE" s3://$S3_BUCKET/logs/logsNode/
 
 if [ $? -eq 0 ]; then
   echo "Log enviado com sucesso para o S3."
