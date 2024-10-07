@@ -1,7 +1,7 @@
 #!/bin/bash
 
-LOG_DIR="/home/ubuntu"
-LOG_FILE="$LOG_DIR/logs/logsSistema/log_sistema_$(date +%d%m%Y_%H%M%S).log"
+LOG_DIR="/home/ubuntu/logs/logsSistema"
+LOG_FILE="$LOG_DIR/log_sistema_$(date +%d%m%Y_%H%M%S).log"
 
 S3_BUCKET="techguard-bucket"
 
