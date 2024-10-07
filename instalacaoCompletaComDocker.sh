@@ -257,4 +257,13 @@ echo -e "${YELLOW}Garantindo inicialização dos contêiners...${NC}"
 sudo docker start TechGuardDB
 sudo docker start TechGuardAPP
 sudo docker start TechGuardJAVA
+
+cd ..
+
+mkdir logs
+cd logs
+mkdir logsSistema
+mkdir logsNode
+mkdir logsJava
+mkdir logsMysql
 echo -e "${GREEN}Instalação finalizada!${NC}"

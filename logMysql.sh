@@ -1,7 +1,7 @@
 #!/bin/bash
 
-LOG_DIR="/var/log/myapp"
-LOG_FILE="$LOG_DIR/logs/logs_DB_$(date +%d%m%Y_%H%M%S).log"
+LOG_DIR="/home/ubuntu"
+LOG_FILE="$LOG_DIR/logs/logsMysql/logs_DB_$(date +%d%m%Y_%H%M%S).log"
 
 S3_BUCKET="techguard-bucket"
 
