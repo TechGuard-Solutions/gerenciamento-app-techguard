@@ -258,12 +258,12 @@ sudo docker start TechGuardDB
 sudo docker start TechGuardAPP
 # sudo docker start TechGuardJAVA
 
-cd ..
+# cd ..
 
-mkdir logs
-cd logs
-mkdir logsSistema
-mkdir logsNode
-mkdir logsJava
-mkdir logsMysql
+# mkdir logs
+# cd logs
+# mkdir logsSistema
+# mkdir logsNode
+# mkdir logsJava
+# mkdir logsMysql
 echo -e "${GREEN}Instalação finalizada!${NC}"
