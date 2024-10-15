@@ -9,13 +9,14 @@ NC='\033[0m'        # Sem cor (para resetar)
 # Função para verificar o sucesso da última operação
 check_last_command() {
   if [ $? -ne 0 ]; then
-    echo -e "${RED}Erro durante a execução do último comando. Saindo...${NC}"
-    exit 1
+    echo -e "${RED}Erro durante a execução do último comando.${NC}"
+    # exit 1
   fi
 }
 
 echo -e "${YELLOW}Atualizando sistema...${NC}"
 sudo apt update && sudo apt upgrade -y
+apt list --upgradable
 check_last_command
 echo -e "${GREEN}Sistema atualizado!${NC}"
 
