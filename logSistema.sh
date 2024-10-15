@@ -5,34 +5,40 @@ LOG_FILE="$LOG_DIR/log_sistema_$(date +%d%m%Y_%H%M%S).log"
 
 S3_BUCKET="techguard-bucket"
 
+# Verifica se o diretório de logs existe; caso contrário, cria-o.
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR"
 fi
 
-echo "======================" >> "$LOG_FILE"
-echo "Log gerado em: $(date)" >> "$LOG_FILE"
-echo "======================" >> "$LOG_FILE"
+# Começa a registrar as informações no arquivo de log.
+{
+  echo "======================"
+  echo "Log gerado em: $(date)"
+  echo "======================"
 
-echo "Uptime:" >> "$LOG_FILE"
-uptime >> "$LOG_FILE"
+  echo "Uptime:"
+  uptime
 
-echo "Espaço em disco:" >> "$LOG_FILE"
-df -h >> "$LOG_FILE"
+  echo "Espaço em disco:"
+  df -h
 
-echo "Memória:" >> "$LOG_FILE"
-free -h >> "$LOG_FILE"
+  echo "Memória:"
+  free -h
 
-echo "Processos ativos:" >> "$LOG_FILE"
-ps aux --sort=-%mem | head -10 >> "$LOG_FILE"
+  echo "Processos ativos:"
+  ps aux --sort=-%mem | head -10
 
-echo "======================" >> "$LOG_FILE"
-echo "Log concluído." >> "$LOG_FILE"
+  echo "======================"
+  echo "Log concluído."
+} >> "$LOG_FILE" 2>&1  # Redireciona tanto a saída padrão quanto os erros para o arquivo de log.
 
+# Envia o arquivo de log para o bucket S3.
 echo "Enviando log para o S3: $S3_BUCKET"
-aws s3 cp "$LOG_FILE" s3://$S3_BUCKET/logs/logsSistema/
+aws s3 cp "$LOG_FILE" s3://$S3_BUCKET/logs/logsSistema/ >> "$LOG_FILE" 2>&1
 
+# Verifica se o upload foi bem-sucedido e registra no log.
 if [ $? -eq 0 ]; then
-  echo "Log enviado com sucesso para o S3."
+  echo "Log enviado com sucesso para o S3." >> "$LOG_FILE" 2>&1
 else
-  echo "Falha ao enviar log para o S3."
+  echo "Falha ao enviar log para o S3." >> "$LOG_FILE" 2>&1
 fi
