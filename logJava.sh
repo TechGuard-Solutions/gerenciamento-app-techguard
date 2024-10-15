@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_DIR="/home/ubuntu/logs/logsJava"
-LOG_FILE="$LOG_DIR/log_java_$(date +%d%m%Y_%H%M%S).log"
+LOG_FILE="$LOG_DIR/log_java_$(date +%d-%m-%Y_%H-%M-%S).log"
 
 S3_BUCKET="techguard-bucket"
 
