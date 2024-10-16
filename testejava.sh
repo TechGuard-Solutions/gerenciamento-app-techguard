@@ -14,6 +14,19 @@ check_last_command() {
   fi
 }
 
+# Verificando instalação do Maven
+echo -e "${YELLOW}Verificando instalação do Maven...${NC}"
+mvn -v
+if [ $? = 0 ]; then
+  echo -e "${GREEN}Maven instalado!${NC}"
+else
+  echo -e "${RED}Maven não está instalado. Instalando...${NC}"
+  sudo apt-get update
+  sudo apt-get install maven -y
+  check_last_command
+  echo -e "${GREEN}Maven instalado com sucesso!${NC}"
+fi
+
 # Criando diretório para JAVA
 DIRECTORY="DockerfileJava"
 if [ -d "$DIRECTORY" ]; then
