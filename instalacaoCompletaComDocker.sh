@@ -214,8 +214,7 @@ if [ $? = 0 ]; then
   echo -e "${GREEN}Maven instalado!${NC}"
 else
   echo -e "${RED}Maven não está instalado. Instalando...${NC}"
-  sudo apt-get update
-  sudo apt-get install maven -y
+  sudo apt install maven -y
   check_last_command
   echo -e "${GREEN}Maven instalado com sucesso!${NC}"
 fi
