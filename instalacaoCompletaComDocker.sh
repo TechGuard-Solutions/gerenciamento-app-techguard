@@ -265,13 +265,14 @@ else
 fi
 
 echo -e "${YELLOW}Acessando diretório...${NC}"
-cd DockerfileJava/conexao-java
+cd DockerfileJava/
 git clone https://github.com/TechGuard-Solutions/conexao-java.git
 check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
 
 # Buildando o projeto com Maven
 echo -e "${YELLOW}Buildando o projeto com Maven...${NC}"
+cd conexao-java
 mvn clean package
 check_last_command
 echo -e "${GREEN}Build do projeto concluído!${NC}"
