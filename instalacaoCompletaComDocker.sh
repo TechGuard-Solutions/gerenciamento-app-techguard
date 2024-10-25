@@ -99,6 +99,50 @@ else
   echo -e "${GREEN}AWS CLI já está instalado!${NC}"
 fi
 
+# Verificando instalação do Maven
+echo -e "${YELLOW}Verificando instalação do Maven...${NC}"
+mvn -v
+if [ $? = 0 ]; then
+  echo -e "${GREEN}Maven instalado!${NC}"
+else
+  echo -e "${RED}Maven não está instalado. Instalando...${NC}"
+  sudo apt install maven -y
+  check_last_command
+  echo -e "${GREEN}Maven instalado com sucesso!${NC}"
+fi
+
+#Baixando CRON
+echo -e "${YELLOW}Verificando instalação do CRON...${NC}"
+cron -v
+if [ $? = 0 ]; then
+  echo -e "${GREEN}CRON instalado!${NC}"
+else
+  echo -e "${RED}CRON não está instalado. Instalando...${NC}"
+  sudo apt install cron -y
+  check_last_command
+  echo -e "${GREEN}CRON instalado com sucesso!${NC}"
+fi
+
+# Definindo os caminhos completos dos scripts
+LOG_SISTEMA="/home/ubuntu/gerenciamento-app-techguard/logSistema.sh"
+LOG_NODE="/home/ubuntu/gerenciamento-app-techguard/logNode.sh"
+LOG_JAVA="/home/ubuntu/gerenciamento-app-techguard/logJava.sh"
+LOG_MYSQL="/home/ubuntu/gerenciamento-app-techguard/logMysql.sh"
+
+# Criando as entradas do cron
+CRON_SISTEMA="0 17 * * * bash $LOG_SISTEMA"
+CRON_NODE="0 17 * * * bash $LOG_NODE"
+CRON_JAVA="0 17 * * * bash $LOG_JAVA"
+CRON_MYSQL="0 17 * * * bash $LOG_MYSQL"
+
+# Adiciona ou atualiza os cron jobs
+(crontab -l | grep -Fxq "$CRON_SISTEMA") || (crontab -l; echo "$CRON_SISTEMA") | crontab -
+(crontab -l | grep -Fxq "$CRON_NODE") || (crontab -l; echo "$CRON_NODE") | crontab -
+(crontab -l | grep -Fxq "$CRON_JAVA") || (crontab -l; echo "$CRON_JAVA") | crontab -
+(crontab -l | grep -Fxq "$CRON_MYSQL") || (crontab -l; echo "$CRON_MYSQL") | crontab -
+
+echo "Todos os cron jobs foram configurados com sucesso!"
+
 # Criando Network Docker
 sudo docker network create techguard-network
 check_last_command
@@ -207,19 +251,6 @@ echo -e "${GREEN}Container MySQL iniciado com sucesso!${NC}"
 cd ..
 
 # Criando diretório para JAVA
-# Verificando instalação do Maven
-echo -e "${YELLOW}Verificando instalação do Maven...${NC}"
-mvn -v
-if [ $? = 0 ]; then
-  echo -e "${GREEN}Maven instalado!${NC}"
-else
-  echo -e "${RED}Maven não está instalado. Instalando...${NC}"
-  sudo apt install maven -y
-  check_last_command
-  echo -e "${GREEN}Maven instalado com sucesso!${NC}"
-fi
-
-# Criando diretório para JAVA
 DIRECTORY="DockerfileJava"
 if [ -d "$DIRECTORY" ]; then
   echo -e "${YELLOW}Diretório DockerfileJava já existe. Pulando criação.${NC}"
@@ -247,10 +278,20 @@ echo -e "${YELLOW}Criando Dockerfile com imagem JAVA...${NC}"
 DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM openjdk:21
+
+RUN apt install -y cron && \
+echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
+chmod 0644 /etc/cron.d/mycron && \
+crontab /etc/cron.d/mycron
+
 WORKDIR /usr/src/app
 COPY conexao-java/ /usr/src/app/
+
+COPY start.sh /usr/src/app/start.sh
+RUN chmod +x /usr/src/app/start.sh
+
 EXPOSE 3030
-CMD ["java", "-jar", "target/iniciar.jar"]
+CMD ["/usr/src/app/start.sh"]
 EOF
 check_last_command
 echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
@@ -271,5 +312,7 @@ echo -e "${YELLOW}Garantindo inicialização dos contêiners...${NC}"
 sudo docker start TechGuardDB
 sudo docker start TechGuardAPP
 sudo docker start TechGuardJAVA
+
+echo -e "${YELLOW}Configurando CRON de Logs...${NC}"
 
 echo -e "${GREEN}Instalação finalizada!${NC}"
