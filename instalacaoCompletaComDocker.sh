@@ -20,6 +20,9 @@ apt list --upgradable
 check_last_command
 echo -e "${GREEN}Sistema atualizado!${NC}"
 
+echo -e "${YELLOW}Configurando DPKG...${NC}"
+sudo dpkg --configure -a
+
 # Verificando instalação do Git
 echo -e "${YELLOW}Verificando instalação do Git...${NC}"
 git --version
@@ -113,7 +116,7 @@ fi
 
 #Baixando CRON
 echo -e "${YELLOW}Verificando instalação do CRON...${NC}"
-cron -v
+dpkg -l | grep cron
 if [ $? = 0 ]; then
   echo -e "${GREEN}CRON instalado!${NC}"
 else
