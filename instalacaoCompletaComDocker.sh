@@ -265,7 +265,7 @@ else
 fi
 
 echo -e "${YELLOW}Acessando diretório...${NC}"
-cd DockerfileJava
+cd DockerfileJava/conexao-java
 git clone https://github.com/TechGuard-Solutions/conexao-java.git
 check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
