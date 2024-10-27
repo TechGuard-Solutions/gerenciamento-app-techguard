@@ -58,4 +58,5 @@ echo -e "${GREEN}Build concluído com sucesso!${NC}"
 # Iniciando container JAVA
 echo -e "${YELLOW}Iniciando container...${NC}"
 sudo docker run -d --name TechGuardJAVA --network techguard-network -p 3030:3030 javatechguard-img
+sudo docker exec -it TechGuardJAVA /bin/bash
 echo -e "${GREEN}Container JAVA iniciado com sucesso!${NC}"
