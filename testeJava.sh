@@ -13,14 +13,14 @@ cd DockerfileJava/
 script="start.sh"
 cat <<EOF >$script
 #!/bin/bash
-sudo apt install curl -y
-sudo apt install cron -y
-sudo apt install unzip -y
-sudo apt install maven -y
+apt install curl -y
+apt install cron -y
+apt install unzip -y
+apt install maven -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" unzip awscliv2.zip
-sudo ./aws/install
+./aws/install
 rm -rf awscliv2.zip aws
-sudo apt install -y openjdk-21-jdk
+apt install -y openjdk-21-jdk
 service cron start
 echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
 crontab /etc/cron.d/mycron
@@ -43,6 +43,13 @@ DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM ubuntu:latest
 WORKDIR /usr/src/app
+RUN apt update && \
+    apt install -y curl cron unzip maven openjdk-21-jdk && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf awscliv2.zip aws
+
 COPY conexao-java/ /usr/src/app/
 COPY start.sh /usr/src/app/start.sh
 EXPOSE 3030
@@ -58,5 +65,4 @@ echo -e "${GREEN}Build concluído com sucesso!${NC}"
 # Iniciando container JAVA
 echo -e "${YELLOW}Iniciando container...${NC}"
 sudo docker run -d --name TechGuardJAVA --network techguard-network -p 3030:3030 javatechguard-img
-sudo docker exec -it TechGuardJAVA /bin/bash
 echo -e "${GREEN}Container JAVA iniciado com sucesso!${NC}"
