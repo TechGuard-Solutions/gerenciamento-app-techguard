@@ -1,3 +1,5 @@
+sudo docker network create techguard-network
+
 # Criando diretório para JAVA
 DIRECTORY="DockerfileJava"
 if [ -d "$DIRECTORY" ]; then
@@ -43,7 +45,7 @@ FROM ubuntu:latest
 WORKDIR /usr/src/app
 COPY conexao-java/ /usr/src/app/
 COPY start.sh /usr/src/app/start.sh
-EXPOSE 3000
+EXPOSE 3030
 CMD ["/usr/src/app/start.sh"]
 EOF
 echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
@@ -55,5 +57,5 @@ echo -e "${GREEN}Build concluído com sucesso!${NC}"
 
 # Iniciando container JAVA
 echo -e "${YELLOW}Iniciando container...${NC}"
-sudo docker run -d --name TechGuardJAVA --network techguard-network -p 3000:3000 javatechguard-img
+sudo docker run -d --name TechGuardJAVA --network techguard-network -p 3030:3030 javatechguard-img
 echo -e "${GREEN}Container JAVA iniciado com sucesso!${NC}"
