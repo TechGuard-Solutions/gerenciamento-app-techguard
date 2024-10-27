@@ -183,7 +183,6 @@ FROM openjdk:21
 
 RUN apt install -y cron && \
 echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
-chmod 0644 /etc/cron.d/mycron && \
 crontab /etc/cron.d/mycron
 
 WORKDIR /usr/src/app
