@@ -183,9 +183,8 @@ cat <<EOF >$DOCKERFILE
 FROM openjdk:21
 WORKDIR /usr/src/app
 COPY conexao-java/ /usr/src/app/
-COPY start.sh /usr/src/app/start.sh
 EXPOSE 3030
-CMD ["/usr/src/app/start.sh"]
+CMD ["/usr/src/app/conexao-java/start.sh"]
 EOF
 check_last_command
 echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
