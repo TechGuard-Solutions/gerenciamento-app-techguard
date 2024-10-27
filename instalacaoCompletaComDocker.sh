@@ -178,6 +178,8 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 ./aws/install
 rm -rf awscliv2.zip aws
 
+mkdir -p ~/.aws
+
 cat <<EOL > ~/.aws/credentials
 [default]
 aws_access_key_id=$AWS_ACCESS_KEY
