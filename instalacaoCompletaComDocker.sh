@@ -181,7 +181,6 @@ echo -e "${YELLOW}Criando Dockerfile com imagem JAVA...${NC}"
 DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM openjdk:21
-RUN apt install -y cron && \
 WORKDIR /usr/src/app
 COPY conexao-java/ /usr/src/app/
 COPY start.sh /usr/src/app/start.sh
