@@ -220,11 +220,30 @@ cat <<EOF >$DOCKERFILE
 FROM ubuntu:latest
 WORKDIR /usr/src/app
 RUN apt update && \
-    apt install -y curl cron unzip maven openjdk-21-jdk && \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    ./aws/install && \
-    rm -rf awscliv2.zip aws
+apt update && apt install -y curl cron unzip maven openjdk-21-jdk
+
+if dpkg -l | grep -q unzip; then
+    echo "Unzip instalado com sucesso."
+else
+    echo "Falha na instalação do unzip."
+fi
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+if [ $? -ne 0 ]; then
+    echo "Falha ao baixar AWS CLI."
+fi
+
+unzip awscliv2.zip
+if [ $? -ne 0 ]; then
+    echo "Falha ao descompactar AWS CLI."
+fi
+
+./aws/install
+if [ $? -ne 0 ]; then
+    echo "Falha na instalação do AWS CLI."
+fi
+
+rm -rf awscliv2.zip aws
 
 COPY conexao-java/ /usr/src/app/
 COPY start.sh /usr/src/app/start.sh
