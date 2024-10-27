@@ -164,6 +164,15 @@ fi
 
 echo -e "${YELLOW}Acessando diretório...${NC}"
 cd DockerfileJava/
+script="start.sh"
+cat <<EOF >$script
+#!/bin/bash
+service cron start
+echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
+crontab /etc/cron.d/mycron
+java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar
+EOF
+check_last_command
 git clone https://github.com/TechGuard-Solutions/conexao-java.git
 check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
@@ -183,8 +192,9 @@ cat <<EOF >$DOCKERFILE
 FROM openjdk:21
 WORKDIR /usr/src/app
 COPY conexao-java/ /usr/src/app/
+COPY start.sh /usr/src/app/start.sh
 EXPOSE 3030
-CMD ["/usr/src/app/conexao-java/start.sh"]
+CMD ["/usr/src/app/start.sh"]
 EOF
 check_last_command
 echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
