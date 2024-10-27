@@ -190,7 +190,6 @@ WORKDIR /usr/src/app
 COPY conexao-java/ /usr/src/app/
 
 COPY start.sh /usr/src/app/start.sh
-RUN chmod +x /usr/src/app/start.sh
 
 EXPOSE 3030
 CMD ["/usr/src/app/start.sh"]
