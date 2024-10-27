@@ -173,6 +173,7 @@ echo -e "${YELLOW}Buildando o projeto com Maven...${NC}"
 cd conexao-java
 mvn clean package
 check_last_command
+cd ..
 echo -e "${GREEN}Build do projeto concluído!${NC}"
 
 # Criando Dockerfile para JAVA
