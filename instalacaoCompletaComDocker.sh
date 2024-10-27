@@ -10,7 +10,7 @@ NC='\033[0m'        # Sem cor (para resetar)
 check_last_command() {
   if [ $? -ne 0 ]; then
     echo -e "${RED}Erro durante a execução do último comando.${NC}"
-    # exit 1
+    exit 1
   fi
 }
 
@@ -22,6 +22,7 @@ echo -e "${GREEN}Sistema atualizado!${NC}"
 
 echo -e "${YELLOW}Configurando DPKG...${NC}"
 sudo dpkg --configure -a
+check_last_command
 
 # Verificando instalação do Git
 echo -e "${YELLOW}Verificando instalação do Git...${NC}"
