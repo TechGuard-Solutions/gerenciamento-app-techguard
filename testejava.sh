@@ -178,6 +178,8 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 ./aws/install
 rm -rf awscliv2.zip aws
 
+mkdir -p ~/.aws
+
 cat <<EOL > ~/.aws/credentials
 [default]
 aws_access_key_id=$AWS_ACCESS_KEY
@@ -219,13 +221,6 @@ DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM ubuntu:latest
 WORKDIR /usr/src/app
-RUN apt update && \
-    apt install -y curl cron unzip maven openjdk-21-jdk && \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    ./aws/install && \
-    rm -rf awscliv2.zip aws
-
 COPY conexao-java/ /usr/src/app/
 COPY start.sh /usr/src/app/start.sh
 EXPOSE 3030
