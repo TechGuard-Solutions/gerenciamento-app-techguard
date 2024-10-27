@@ -174,6 +174,9 @@ apt install curl -y
 apt install cron -y
 apt install unzip -y
 apt install maven -y
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" unzip awscliv2.zip
+./aws/install
+rm -rf awscliv2.zip aws
 
 cat <<EOL > ~/.aws/credentials
 [default]
