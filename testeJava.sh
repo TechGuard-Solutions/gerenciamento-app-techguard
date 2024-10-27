@@ -13,6 +13,7 @@ cd DockerfileJava/
 script="start.sh"
 cat <<EOF >$script
 #!/bin/bash
+apt update && apt upgrade -y
 apt install curl -y
 apt install cron -y
 apt install unzip -y
@@ -20,6 +21,22 @@ apt install maven -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" unzip awscliv2.zip
 ./aws/install
 rm -rf awscliv2.zip aws
+
+mkdir -p ~/.aws
+
+cat <<EOL > ~/.aws/credentials
+[default]
+aws_access_key_id=$AWS_ACCESS_KEY
+aws_secret_access_key=$AWS_SECRECT_ACCESS_KEY
+aws_session_token=$AWS_SESSION_TOKEN
+EOL
+
+cat <<EOL > ~/.aws/config
+[default]
+region=us-east-1
+output=json
+EOL
+
 apt install -y openjdk-21-jdk
 service cron start
 echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
