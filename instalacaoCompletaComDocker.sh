@@ -173,6 +173,8 @@ crontab /etc/cron.d/mycron
 java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar
 EOF
 check_last_command
+chmod +x start.sh
+check_last_command
 git clone https://github.com/TechGuard-Solutions/conexao-java.git
 check_last_command
 echo -e "${GREEN}Diretório acessado${NC}"
