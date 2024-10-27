@@ -18,11 +18,6 @@ apt install curl -y
 apt install cron -y
 apt install unzip -y
 apt install maven -y
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" unzip awscliv2.zip
-./aws/install
-rm -rf awscliv2.zip aws
-
-mkdir -p ~/.aws
 
 cat <<EOL > ~/.aws/credentials
 [default]
@@ -41,6 +36,7 @@ apt install -y openjdk-21-jdk
 service cron start
 echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
 crontab /etc/cron.d/mycron
+crontab -l
 java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar
 EOF
 chmod +x start.sh
