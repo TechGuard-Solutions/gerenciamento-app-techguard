@@ -8,12 +8,9 @@ fi
 cd DockerfileJava/
 git clone https://github.com/TechGuard-Solutions/conexao-java.git
 
-echo -e "${YELLOW}Buildando o projeto com Maven...${NC}"
 cd conexao-java
 mvn clean package
-echo -e "${GREEN}Build do projeto concluído!${NC}"
 
-echo -e "${YELLOW}Criando Dockerfile com imagem JAVA...${NC}"
 DOCKERFILE="Dockerfile"
 cat <<EOF >$DOCKERFILE
 FROM openjdk:21
@@ -32,9 +29,5 @@ RUN chmod +x /usr/src/app/start.sh
 EXPOSE 3030
 CMD ["/usr/src/app/start.sh"]
 EOF
-check_last_command
-echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
 
-echo -e "${YELLOW}Buildando imagem...${NC}"
 sudo docker build -t javatechguard-img .
-echo -e "${GREEN}Build concluído com sucesso!${NC}"
