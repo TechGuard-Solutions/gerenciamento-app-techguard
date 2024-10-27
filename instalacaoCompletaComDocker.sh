@@ -133,6 +133,8 @@ LOG_NODE="/home/ubuntu/gerenciamento-app-techguard/logNode.sh"
 LOG_JAVA="/home/ubuntu/gerenciamento-app-techguard/logJava.sh"
 LOG_MYSQL="/home/ubuntu/gerenciamento-app-techguard/logMysql.sh"
 
+echo -e "${YELLOW}Configurando CRON de Logs...${NC}"
+
 # Criando as entradas do cron
 CRON_SISTEMA="0 17 * * * bash $LOG_SISTEMA"
 CRON_NODE="0 17 * * * bash $LOG_NODE"
@@ -167,6 +169,7 @@ cd DockerfileJava/
 script="start.sh"
 cat <<EOF >$script
 #!/bin/bash
+sudo apt install cron -y
 service cron start
 echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
 crontab /etc/cron.d/mycron
@@ -320,7 +323,5 @@ echo -e "${YELLOW}Garantindo inicialização dos contêiners...${NC}"
 sudo docker start TechGuardDB
 sudo docker start TechGuardAPP
 sudo docker start TechGuardJAVA
-
-echo -e "${YELLOW}Configurando CRON de Logs...${NC}"
 
 echo -e "${GREEN}Instalação finalizada!${NC}"
