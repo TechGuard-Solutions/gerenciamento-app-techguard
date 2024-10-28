@@ -60,6 +60,7 @@ echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.
 crontab /etc/cron.d/mycron
 crontab -l
 java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar
+wait
 EOF
 check_last_command
 chmod +x start.sh
