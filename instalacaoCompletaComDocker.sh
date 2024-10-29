@@ -136,10 +136,10 @@ LOG_MYSQL="/home/ubuntu/gerenciamento-app-techguard/logMysql.sh"
 echo -e "${YELLOW}Configurando CRON de Logs...${NC}"
 
 # Criando as entradas do cron
-CRON_SISTEMA="0 17 * * * bash $LOG_SISTEMA"
-CRON_NODE="0 17 * * * bash $LOG_NODE"
-CRON_JAVA="0 17 * * * bash $LOG_JAVA"
-CRON_MYSQL="0 17 * * * bash $LOG_MYSQL"
+CRON_SISTEMA="* * * * * bash $LOG_SISTEMA"
+CRON_NODE="* * * * * bash $LOG_NODE"
+CRON_JAVA="* * * * * bash $LOG_JAVA"
+CRON_MYSQL="* * * * * bash $LOG_MYSQL"
 
 # Adiciona ou atualiza os cron jobs
 (crontab -l | grep -Fxq "$CRON_SISTEMA") || (crontab -l; echo "$CRON_SISTEMA") | crontab -
@@ -195,7 +195,7 @@ EOL
 
 apt install -y openjdk-21-jdk
 service cron start
-echo "0 16 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
+echo "0 18 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
 crontab /etc/cron.d/mycron
 crontab -l
 java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar
