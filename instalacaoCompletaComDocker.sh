@@ -159,7 +159,7 @@ if [ -d "$DIRECTORY" ]; then
   echo -e "${YELLOW}Diretório DockerfileJava já existe. Pulando criação.${NC}"
 else
   echo -e "${YELLOW}Criando diretório de imagem Java...${NC}"
-  mkdir DockerfileJava
+ sudo mkdir DockerfileJava
   check_last_command
   echo -e "${GREEN}Diretório criado com sucesso!${NC}"
 fi
@@ -249,7 +249,7 @@ if [ -d "$DIRECTORY" ]; then
   echo -e "${YELLOW}Diretório DockerfileNode já existe. Pulando criação.${NC}"
 else
   echo -e "${YELLOW}Criando diretório de imagem Node...${NC}"
-  mkdir DockerfileNode
+  sudo mkdir DockerfileNode
   check_last_command
   echo -e "${GREEN}Diretório criado com sucesso!${NC}"
 fi
@@ -304,7 +304,7 @@ if [ -d "$DIRECTORY" ]; then
   echo -e "${YELLOW}Diretório DockerfileMysql já existe. Pulando criação.${NC}"
 else
   echo -e "${YELLOW}Criando diretório de imagem MySQL...${NC}"
-  mkdir DockerfileMysql
+  sudo mkdir DockerfileMysql
   check_last_command
   echo -e "${GREEN}Diretório criado com sucesso!${NC}"
 fi
