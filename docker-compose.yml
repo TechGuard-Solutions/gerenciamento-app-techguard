@@ -15,9 +15,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: solutions
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
-      - mysql_techguard:/var/lib/mysql
+      - mysql_techguard:/docker-entrypoint-initdb.d
     networks:
       - techguard-network
 
@@ -26,19 +26,22 @@ services:
     image: arturmatukiwa/nodeimagem:1.0
     restart: always
     ports:
-      - 80:80
+      - "8080:8080"
     volumes:
       - node_techguard:/usr/src/app
     networks:
       - techguard-network
+    depends_on:
+      - mysql
 
   java:
     container_name: TechGuardJAVA
-    image: arturmatukiwa/javaimagem:1.0
+    image: javaimagem:1.0
     restart: always
     ports:
-      - 3030:3030
+      - "3030:3030"
     volumes:
       - java_techguard:/usr/src/app
     networks:
       - techguard-network
+    
