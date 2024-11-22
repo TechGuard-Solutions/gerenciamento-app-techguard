@@ -36,7 +36,7 @@ services:
 
   java:
     container_name: TechGuardJAVA
-    image: javaimagem:1.0
+    image: arturmatukiwa/javatechguard:1.0
     restart: always
     ports:
       - "3030:3030"
