@@ -97,7 +97,7 @@ if ! command -v aws &> /dev/null; then
   check_last_command
   
   # Remover arquivos temporários
-  rm -rf awscliv2.zip aws
+  sudo rm -rf awscliv2.zip aws
   echo -e "${GREEN}AWS CLI instalado com sucesso e arquivos temporários removidos!${NC}"
 else
   echo -e "${GREEN}AWS CLI já está instalado!${NC}"
@@ -149,231 +149,81 @@ CRON_MYSQL="* * * * * bash $LOG_MYSQL"
 
 echo "Todos os cron jobs foram configurados com sucesso!"
 
-# Criando Network Docker
-#sudo docker network create techguard-network
-#check_last_command
+echo -e "${YELLOW}Criando docker compose...${NC}"
+DOCKER_COMPOSE="docker-compose.yml" 
+if [ -f "$DOCKER_COMPOSE" ]; then
+   echo -e "${YELLOW}Docker compose já existe, pulando criação...${NC}"
+else
+cat <<EOF >$DOCKER_COMPOSE
+volumes:
+  mysql_techguard:
+  node_techguard:
+  java_techguard:
 
-# Criando diretório para JAVA
-#DIRECTORY="DockerfileJava"
-#if [ -d "$DIRECTORY" ]; then
-#  echo -e "${YELLOW}Diretório DockerfileJava já existe. Pulando criação.${NC}"
-#else
-#  echo -e "${YELLOW}Criando diretório de imagem Java...${NC}"
-# sudo mkdir DockerfileJava
-#  check_last_command
-#  echo -e "${GREEN}Diretório criado com sucesso!${NC}"
-#fi
-#
-#echo -e "${YELLOW}Acessando diretório...${NC}"
-#cd DockerfileJava/
-script="start.sh"
-cat <<EOF >$script
-#!/bin/bash
-apt update && apt upgrade -y
-apt install curl -y
-apt install cron -y
-apt install unzip -y
-apt install maven -y
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" unzip awscliv2.zip
-./aws/install
-rm -rf awscliv2.zip aws
+networks:
+  techguard-network:
+    driver: bridge
 
-mkdir -p ~/.aws
+services:
+  mysql:
+    container_name: TechGuardDB
+    image: arturmatukiwa/mysqlimagem:1.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: solutions
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_techguard:/docker-entrypoint-initdb.d
+    networks:
+      - techguard-network
 
-cat <<EOL > ~/.aws/credentials
-[default]
-aws_access_key_id=$AWS_ACCESS_KEY
-aws_secret_access_key=$AWS_SECRECT_ACCESS_KEY
-aws_session_token=$AWS_SESSION_TOKEN
-EOL
+  node:
+    container_name: TechGuardAPP
+    image: arturmatukiwa/nodeimagem:1.0
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - node_techguard:/usr/src/app
+    networks:
+      - techguard-network
+    depends_on:
+      - mysql
 
-cat <<EOL > ~/.aws/config
-[default]
-region=us-east-1
-output=json
-EOL
-
-apt install -y openjdk-21-jdk
-service cron start
-echo "0 18 * * * java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar" > /etc/cron.d/mycron
-crontab /etc/cron.d/mycron
-crontab -l
-chmod +rx target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar 
-java -jar target/Integracao-1.0-SNAPSHOT-jar-with-dependencies.jar
-
-tail -f /dev/null
+  java:
+    container_name: TechGuardJAVA
+    image: arturmatukiwa/javatechguard:2.0
+    restart: always
+    ports:
+      - "3030:3030"
+    volumes:
+      - java_techguard:/usr/src/app
+    networks:
+      - techguard-network
 EOF
 check_last_command
-# Verificando instalação do dos2unix
-echo -e "${YELLOW}Verificando instalação do Maven...${NC}"
-dos2unix --version
-if [ $? = 0 ]; then
-  echo -e "${GREEN}dos2unix instalado!${NC}"
-else
-  echo -e "${RED}dos2uni não está instalado. Instalando...${NC}"
-  sudo apt-get install dos2unix -y
-  check_last_command
-  echo -e "${GREEN}dos2unix instalado com sucesso!${NC}"
 fi
+echo -e "${GREEN}Criação do docker compose realizada com sucesso!${NC}"
 
-chmod +x start.sh
+echo -e "${YELLOW}Iniciando criação de contêineres com docker compose...${NC}"
+sudo docker-compose up -d
+echo -e "${GREEN}Inicialização dos contêineres com sucesso!${NC}"
+
+echo -e "${YELLOW}Configuração do portainer...${NC}"
+
+docker volume create portainer_data
 check_last_command
-git clone https://github.com/TechGuard-Solutions/conexao-java.git
+docker run -d -p 9000:9000 --name portainer \
+  --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
 check_last_command
-echo -e "${GREEN}Diretório acessado${NC}"
-echo -e "${YELLOW}Tentativa de sobreescrever 'start.sh'${NC}"
-mv start.sh conexao-java
-check_last_command
 
-# Buildando o projeto com Maven
-echo -e "${YELLOW}Buildando o projeto com Maven...${NC}"
-cd conexao-java
-git checkout features/HerancaeAgregacao
-check_last_command
-mvn clean package
-check_last_command
-dos2unix start.sh
-check_last_command
-cd ..
-#cd ..
-echo -e "${GREEN}Build do projeto concluído!${NC}"
-
-# Criando Dockerfile para JAVA
-#echo -e "${YELLOW}Criando Dockerfile com imagem JAVA...${NC}"
-#DOCKERFILE="Dockerfile"
-#cat <<EOF >$DOCKERFILE
-#FROM ubuntu:latest
-#WORKDIR /usr/src/app
-#COPY conexao-java/ /usr/src/app/
-#COPY start.sh /usr/src/app/start.sh
-#EXPOSE 3030
-#CMD ["/usr/src/app/start.sh"]
-#EOF
-#check_last_command
-#echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
-
-# Buildando imagem do JAVA
-#echo -e "${YELLOW}Buildando imagem...${NC}"
-#sudo docker build -t javatechguard-img .
-#check_last_command
-#echo -e "${GREEN}Build concluído com sucesso!${NC}"
-
-# Iniciando container JAVA
-#echo -e "${YELLOW}Iniciando container...${NC}"
-#sudo docker run -d --name TechGuardJAVA --network techguard-network -p 3030:3030 javatechguard-img
-#check_last_command
-#echo -e "${GREEN}Container JAVA iniciado com sucesso!${NC}"
-
-# Criando diretório para Node
-#DIRECTORY="DockerfileNode"
-#if [ -d "$DIRECTORY" ]; then
-#  echo -e "${YELLOW}Diretório DockerfileNode já existe. Pulando criação.${NC}"
-#else
-#  echo -e "${YELLOW}Criando diretório de imagem Node...${NC}"
-#  sudo mkdir DockerfileNode
-#  check_last_command
-#  echo -e "${GREEN}Diretório criado com sucesso!${NC}"
-#fi
-
-#echo -e "${YELLOW}Acessando diretório...${NC}"
-#cd DockerfileNode
-#check_last_command
-#echo -e "${GREEN}Diretório acessado${NC}"
-
-# Clonando repositório
-#if [ -d "site-institucional" ]; then
-#  echo -e "${YELLOW}Repositório já clonado. Pulando...${NC}"
-#else
-#  echo -e "${YELLOW}Clonando repositório da aplicação...${NC}"
-#  git clone https://github.com/TechGuard-Solutions/site-institucional.git
-#  check_last_command
-#  echo -e "${GREEN}Repositório clonado com sucesso!${NC}"
-#fi
-
-# Criando Dockerfile para Node
-#echo -e "${YELLOW}Criando Dockerfile com imagem Node...${NC}"
-#DOCKERFILE="Dockerfile"
-#cat <<EOF >$DOCKERFILE
-#FROM node:latest
-#WORKDIR /usr/src/app
-#COPY site-institucional/package*.json ./
-#RUN npm install
-#COPY site-institucional/ .
-#EXPOSE 8080
-#CMD ["npm", "start"]
-#EOF
-#check_last_command
-#echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
-
-# Buildando imagem do Node
-#echo -e "${YELLOW}Buildando imagem...${NC}"
-#sudo docker build -t nodetechguard-img .
-#check_last_command
-#echo -e "${GREEN}Build concluído com sucesso!${NC}"
-
-# Iniciando container Node
-#echo -e "${YELLOW}Iniciando container...${NC}"
-#sudo docker run -d --name TechGuardAPP --network techguard-network -p 8080:8080 nodetechguard-img
-#check_last_command
-#echo -e "${GREEN}Container Node iniciado com sucesso!${NC}"
-
-#cd ..
-
-# Criando diretório para MySQL
-#DIRECTORY="DockerfileMysql"
-#if [ -d "$DIRECTORY" ]; then
-#  echo -e "${YELLOW}Diretório DockerfileMysql já existe. Pulando criação.${NC}"
-#else
-#  echo -e "${YELLOW}Criando diretório de imagem MySQL...${NC}"
-#  sudo mkdir DockerfileMysql
-#  check_last_command
-#  echo -e "${GREEN}Diretório criado com sucesso!${NC}"
-#fi
-
-#echo -e "${YELLOW}Acessando diretório...${NC}"
-#cd DockerfileMysql
-#mkdir database
-#check_last_command
-#echo -e "${GREEN}Diretório acessado${NC}"
-
-#echo -e "${YELLOW}Copiando arquivo .sql...${NC}"
-#cp ../DockerfileNode/site-institucional/src/database/script-tabelas.sql ../DockerfileMysql/database/
-#3check_last_command
-#echo -e "${GREEN}Arquivo copiado com sucesso!${NC}"
-
-# Criando Dockerfile para MySQL
-#echo -e "${YELLOW}Criando Dockerfile com imagem MySQL...${NC}"
-#DOCKERFILE="Dockerfile"
-#cat <<EOF >$DOCKERFILE
-#FROM mysql:latest
-#ENV MYSQL_ROOT_PASSWORD=solutions
-#COPY ./database/ /docker-entrypoint-initdb.d/
-#EXPOSE 3306
-#EOF
-#check_last_command
-#echo -e "${GREEN}Dockerfile criado com sucesso!${NC}"
-
-# Buildando imagem do MySQL
-#echo -e "${YELLOW}Buildando imagem...${NC}"
-#sudo docker build -t mysqltechguard-img .
-#check_last_command
-#echo -e "${GREEN}Build concluído com sucesso!${NC}"
-
-# Iniciando container MySQL
-#echo -e "${YELLOW}Iniciando container...${NC}"
-#sudo docker run -d --name TechGuardDB --network techguard-network -p 3306:3306 mysqltechguard-img
-#check_last_command
-#echo -e "${GREEN}Container MySQL iniciado com sucesso!${NC}"
-
-#cd ..
-
-#echo -e "${YELLOW}Garantindo inicialização dos contêiners...${NC}"
-#sudo docker start TechGuardDB
-#sudo docker start TechGuardAPP
-#sudo docker start TechGuardJAVA
-
-echo -e "${YELLOW} Iniciando criação de contêiners com docker compose...${NC}"
-sudo docker-compose up
-
+echo -e "${GREEN}Configuração do portainer feita com sucesso!${NC}"
 echo -e "${GREEN}Instalação finalizada!${NC}"
+
+echo -e "${YELLOW}ALTERE AS CREDENCIAIS AWS DENTRO DO CONTAINER 'TechGuardJAVA'${NC}"
+
 

@@ -44,4 +44,3 @@ services:
       - java_techguard:/usr/src/app
     networks:
       - techguard-network
-    
