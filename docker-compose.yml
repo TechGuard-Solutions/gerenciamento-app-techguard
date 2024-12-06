@@ -1,0 +1,46 @@
+volumes:
+  mysql_techguard:
+  node_techguard:
+  java_techguard:
+
+networks:
+  techguard-network:
+    driver: bridge
+
+services:
+  mysql:
+    container_name: TechGuardDB
+    image: arturmatukiwa/mysqlimagem:5.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: solutions
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_techguard:/var/lib/mysql
+    networks:
+      - techguard-network
+
+  node:
+    container_name: TechGuardAPP
+    image: arturmatukiwa/nodeimagem:7.0
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - node_techguard:/usr/src/app
+    networks:
+      - techguard-network
+    depends_on:
+      - mysql
+
+  java:
+    container_name: TechGuardJAVA
+    image: arturmatukiwa/javatechguard:6.0
+    restart: always
+    ports:
+      - "3030:3030"
+    volumes:
+      - java_techguard:/usr/src/app
+    networks:
+      - techguard-network

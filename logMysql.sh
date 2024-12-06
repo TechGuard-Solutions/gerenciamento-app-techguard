@@ -3,7 +3,7 @@
 LOG_DIR="/home/ubuntu/logs/logsMysql"
 LOG_FILE="$LOG_DIR/logs_DB_$(date +%d-%m-%Y_%H-%M-%S).log"
 
-S3_BUCKET="techguard-bucket"
+S3_BUCKET="bucket-base-de-dados"
 
 # Verifica se o diretório de logs existe; caso contrário, cria-o.
 if [ ! -d "$LOG_DIR" ]; then

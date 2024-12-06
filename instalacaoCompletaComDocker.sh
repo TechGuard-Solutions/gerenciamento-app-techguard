@@ -167,7 +167,7 @@ networks:
 services:
   mysql:
     container_name: TechGuardDB
-    image: arturmatukiwa/mysqlimagem:1.0
+    image: arturmatukiwa/mysqlimagem:4.0
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: solutions
@@ -180,7 +180,7 @@ services:
 
   node:
     container_name: TechGuardAPP
-    image: arturmatukiwa/nodeimagem:1.0
+    image: arturmatukiwa/nodeimagem:4.0
     restart: always
     ports:
       - "8080:8080"
